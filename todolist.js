@@ -11,7 +11,6 @@ function addElementToList(v, operation){
 
     const newObject = document.createElement('li');
     newObject.textContent = v;
-    newObject.value = v;
 
     myList.appendChild(newObject);
 
@@ -90,3 +89,5 @@ Object.keys(localStorage).forEach((key) => {
     const value = localStorage.getItem(key);
     addElementToList(key, value);
 })
+
+//Bartosz Zięba
