@@ -1,12 +1,5 @@
-console.log("js is alive");
-
-Object.keys(localStorage).forEach((key) => {
-    const value = localStorage.getItem(key);
-    addElementToList(key, value);
-});
-
 const input = document.querySelector('input');
-const myList = document.querySelector('ol');
+const myList = document.querySelector('ul');
 let completedCounter = 0;
 
 function addToStorage(v){
@@ -15,8 +8,9 @@ function addToStorage(v){
 function addElementToList(v, operation){
     const newObject = document.createElement('li');
     newObject.textContent = v;
+    newObject.value = v;
 
-    document.querySelector('ol').appendChild(newObject);
+    myList.appendChild(newObject);
 
     const newButton = document.createElement('button');
 
@@ -24,8 +18,8 @@ function addElementToList(v, operation){
     newButton.textContent = 'Done';
     newButton.classList.add('done'); 
     }else{
-    newButton.textContent = 'Unone';
-    newButton.classList.add('undone');
+    newButton.textContent = 'not!';
+    newButton.classList.add('notd');
     newObject.style.textDecoration = 'line-through'
     }
     const newButtonDel = document.createElement('button');
@@ -53,7 +47,7 @@ document.body.addEventListener('click', function(b){
         input.value = '';
     } 
     else if (b.target.id === 'allDone') {
-        completedCounter += myList.children.length
+        completedCounter += +myList.children.length
         document.querySelector("#numberOfdone").innerHTML = completedCounter;
         myList.innerHTML = '';
         localStorage.clear();
@@ -61,25 +55,33 @@ document.body.addEventListener('click', function(b){
     else if(b.target.classList.contains('delete')){ 
         b.target.parentElement.remove();
         document.querySelector("#numberOfdone").innerHTML = ++completedCounter;
+
+        console.log(b.target.parentElement.textContent.slice(0, -10))
+        localStorage.removeItem(b.target.parentElement.textContent.slice(0, -10));
     }
     else if(b.target.classList.contains('done')){
 
         console.log(b.target.parentElement.textContent.slice(0, -10));
 
         b.target.parentElement.style.textDecoration = 'line-through';
-        b.target.textContent = 'Undone'
+        b.target.textContent = 'not!'
         b.target.classList.remove('done');
-        b.target.classList.add('undone');
-        localStorage.setItem(b.target.parentElement.textContent.slice(0, -12), '0');
+        b.target.classList.add('notd');
+        localStorage.setItem(b.target.parentElement.textContent.slice(0, -10), '0');
     }
-    else if(b.target.classList.contains('undone')){
+    else if(b.target.classList.contains('notd')){
 
-        console.log(b.target.parentElement.textContent.slice(0, -12));
+        console.log(b.target.parentElement.textContent.slice(0, -10));
 
         b.target.parentElement.style.textDecoration = 'none';
         b.target.textContent = 'Done'
         b.target.classList.add('done');
-        b.target.classList.remove('undone');
+        b.target.classList.remove('notd');
         localStorage.setItem(b.target.parentElement.textContent.slice(0, -10), '1');
     }
-});
+});//Un
+
+Object.keys(localStorage).forEach((key) => {
+    const value = localStorage.getItem(key);
+    addElementToList(key, value);
+})
