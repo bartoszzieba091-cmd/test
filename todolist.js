@@ -9,8 +9,10 @@ const input = document.querySelector('input');
 const myList = document.querySelector('ol');
 let completedCounter = 0;
 
-function addElementToList(v, operation){
+function addToStorage(v){
     localStorage.setItem(v, '1');
+}
+function addElementToList(v, operation){
     const newObject = document.createElement('li');
     newObject.textContent = v;
 
@@ -39,6 +41,7 @@ function addElementToList(v, operation){
 input.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') {
         addElementToList(input.value, 1);
+        addToStorage(input.value);
         input.value = '';
     }
 });
@@ -46,6 +49,7 @@ input.addEventListener('keydown', function(e) {
 document.body.addEventListener('click', function(b){
     if (b.target.id === 'add') {
         addElementToList(input.value, 1);
+        addToStorage(input.value);
         input.value = '';
     } 
     else if (b.target.id === 'allDone') {
@@ -54,21 +58,28 @@ document.body.addEventListener('click', function(b){
         myList.innerHTML = '';
         localStorage.clear();
     } 
-    else if(b.target.classList.contains('delete')){
+    else if(b.target.classList.contains('delete')){ 
         b.target.parentElement.remove();
         document.querySelector("#numberOfdone").innerHTML = ++completedCounter;
     }
     else if(b.target.classList.contains('done')){
+
+        console.log(b.target.parentElement.textContent.slice(0, -10));
+
         b.target.parentElement.style.textDecoration = 'line-through';
         b.target.textContent = 'Undone'
         b.target.classList.remove('done');
         b.target.classList.add('undone');
-        lo
+        localStorage.setItem(b.target.parentElement.textContent.slice(0, -12), '0');
     }
     else if(b.target.classList.contains('undone')){
+
+        console.log(b.target.parentElement.textContent.slice(0, -12));
+
         b.target.parentElement.style.textDecoration = 'none';
         b.target.textContent = 'Done'
         b.target.classList.add('done');
         b.target.classList.remove('undone');
+        localStorage.setItem(b.target.parentElement.textContent.slice(0, -10), '1');
     }
 });
